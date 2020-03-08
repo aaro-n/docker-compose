@@ -1,0 +1,31 @@
+version: '2'
+services:
+  wallabag:
+    image: wallabag/wallabag
+    restart: always
+    container_name: wallabag
+    environment:
+      - MYSQL_ROOT_PASSWORD=eYFNmwPdy6ufYEK
+      - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
+      - SYMFONY__ENV__DATABASE_HOST=172.17.0.1
+      - SYMFONY__ENV__DATABASE_PORT=3306
+      - SYMFONY__ENV__DATABASE_NAME=wallabag
+      - SYMFONY__ENV__DATABASE_USER=wallabag
+      - SYMFONY__ENV__DATABASE_PASSWORD=wsrpwbD7Xh2
+      - SYMFONY__ENV__DATABASE_CHARSET=utf8mb4
+      - SYMFONY__ENV__MAILER_TRANSPORT=gmail
+      - SYMFONY__ENV__MAILER_HOST=smtp.gmail.com
+      - SYMFONY__ENV__MAILER_USER=xx@gmail.com
+      - SYMFONY__ENV__MAILER_PASSWORD=xxx
+      - SYMFONY__ENV__FROM_EMAIL=xx@gmail.com
+      - SYMFONY__ENV__DOMAIN_NAME=https://xx.xx.info
+      - SYMFONY__ENV__FOSUSER_REGISTRATION=false
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./images:/var/www/wallabag/web/assets/images
+
+  redis:
+    image: redis:alpine
+    restart: always
+

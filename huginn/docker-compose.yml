@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  web:
+     image: huginn/huginn
+     restart: always
+     ports:
+       - "3000:3000"
+     environment:
+       # 域名
+       DOMAIN: https://xx.xx.info
+       ASSET_HOST: https://xx.xx.info
+       # 数据库设置
+       DATABASE_ADAPTER: mysql2
+       DATABASE_ENCODING: utf8mb4
+       DATABASE_NAME: huginn
+       DATABASE_POOL: 20
+       DATABASE_USERNAME: huginn
+       HUGINN_DATABASE_PASSWORD: xx
+       INTENTIONALLY_SLEEP: 10
+       PORT: 3000
+       MYSQL_PORT_3306_TCP_ADDR: 172.17.0.1
+       MYSQL_PORT_3306_TCP_PORT: 3306
+       # 邮箱设置
+       SMTP_DOMAIN: smtp.zoho.com
+       SMTP_USER_NAME: xx@xx.info
+       SMTP_PASSWORD: xx
+       SMTP_SERVER: smtp.zoho.com
+       SMTP_PORT: 587
+       SMTP_AUTHENTICATION: plain
+       #SMTP_ENABLE_STARTTLS_AUTO: true
+       # 邮箱发送设置
+       #SEND_EMAIL_IN_DEVELOPMENT: true
+       EMAIL_FROM_ADDRESS: xx@xx.info
+       # 保存代理日志数量
+       AGENT_LOG_LENGTH: 50
+       # 配置OAuth应用程序
+       # Twitter
+       #TWITTER_OAUTH_KEY: xx
+       #TWITTER_OAUTH_SECRET: xx
+       TWITTER_OAUTH_KEY: xx
+       TWITTER_OAUTH_SECRET: xx
+       # Github
+       GITHUB_OAUTH_KEY: xx
+       GITHUB_OAUTH_SECRET: xx
+

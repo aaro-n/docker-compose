@@ -1,0 +1,66 @@
+version: '2.0'
+services:
+#  db:
+#    image: mariadb:5.5.64
+#    container_name: seafile-mysql
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=db_dev  # Requested, set the root's password of MySQL service.
+#      - MYSQL_LOG_CONSOLE=true
+#    volumes:
+#      - ./seafile-mysql/db:/var/lib/mysql  # Requested, specifies the path to MySQL data persistent store.
+#    networks:
+#      - seafile-net
+
+  memcached:
+    image: memcached:1.5.6
+    container_name: seafile-memcached
+    restart: always
+    entrypoint: memcached -m 126
+    networks:
+      - seafile-net
+
+  elasticsearch:
+    image: seafileltd/elasticsearch-with-ik:5.6.16
+    container_name: seafile-elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 256m
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data  # Requested, specifies the path to Elasticsearch data persistent store.
+    networks:
+      - seafile-net
+          
+  seafile:
+    image: docker.seafile.top/seafileltd/seafile-pro-mc:latest
+    container_name: seafile
+    restart: always
+    ports:
+      - "127.0.0.1:8100:80"
+#      - "127.0.0.1:8100:443"  # If https is enabled, cancel the comment.
+    volumes:
+      - ./data:/shared   # Requested, specifies the path to Seafile data persistent store.
+    environment:
+      - DB_HOST=172.17.0.1
+      - DB_ROOT_PASSWD=eYFNmwPdy6ufYEK  # Requested, the value shuold be root's password of MySQL service.
+      - TIME_ZONE=Asia/Shanghai # Optional, default is UTC. Should be uncomment and set to your local time zone.
+      - SEAFILE_ADMIN_EMAIL=qcqilin@gmail.com # Specifies Seafile admin user, default is 'me@example.com'
+      - SEAFILE_ADMIN_PASSWORD=yong.2017     # Specifies Seafile admin password, default is 'asecret'
+      - SEAFILE_SERVER_LETSENCRYPT=false   # Whether to use https or not
+      - SEAFILE_SERVER_HOSTNAME=wd.itansuo.info # Specifies your host name if https is enabled
+    depends_on:
+#     - db
+      - memcached
+      - elasticsearch
+    networks:
+      - seafile-net
+
+networks:
+  seafile-net:
